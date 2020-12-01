@@ -16,8 +16,11 @@ func main() {
 	}
 	splitStrings := strings.Split(strings.TrimSpace(string(contents)), "\n")
 	values := toInts(splitStrings)
-	result := solver.Part1(values, 2020)
-	fmt.Println(result)
+
+	fmt.Printf("Part 1 = %v", solver.Part1(values, 2020))
+	fmt.Println("")
+	fmt.Printf("Part 2 = %v", solver.Part2(values, 2020))
+	fmt.Println("")
 }
 
 func toInts(stringList []string) []int {
