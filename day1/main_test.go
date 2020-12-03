@@ -1,4 +1,4 @@
-package solver
+package main
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 
 func TestExampleCasePart1(t *testing.T) {
 	values := []int{1721, 979, 366, 299, 675, 1456}
-	result := Part1(values, 2020)
+	result := Day1Part1(values, 2020)
 	expected := 514579
 
 	if result != expected {
@@ -16,7 +16,7 @@ func TestExampleCasePart1(t *testing.T) {
 
 func TestExampleCasePart2(t *testing.T) {
 	values := []int{1721, 979, 366, 299, 675, 1456}
-	result := Part2(values, 2020)
+	result := Day1Part2(values, 2020)
 	expected := 241861950
 
 	if result != expected {
