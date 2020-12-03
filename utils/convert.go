@@ -10,10 +10,14 @@ func ToInteger(text string) (int, error) {
 }
 
 // ToIntegers converts a slice of strings to a slice of integers
-func ToIntegers(stringList []string) []int {
+func ToIntegers(stringList []string) ([]int, error) {
 	ints := make([]int, len(stringList))
 	for i, s := range stringList {
-		ints[i], _ = ToInteger(s)
+		value, err := ToInteger(s)
+		if err != nil {
+			return nil, err
+		}
+		ints[i] = value
 	}
-	return ints
+	return ints, nil
 }

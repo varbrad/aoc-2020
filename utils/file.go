@@ -32,5 +32,5 @@ func ReadInputToIntegerList(path string) ([]int, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ToIntegers(rows), nil
+	return ToIntegers(rows)
 }
