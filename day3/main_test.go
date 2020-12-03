@@ -2,6 +2,8 @@ package main
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDay3Part1(t *testing.T) {
@@ -19,12 +21,10 @@ func TestDay3Part1(t *testing.T) {
 		".#..#...#.#",
 	}
 
-	result := Day3Part1(input)
 	expected := 7
+	actual := Day3Part1(input)
 
-	if result != expected {
-		t.Fatalf("The provided example case failed, expected %v, got %v", expected, result)
-	}
+	assert.Equal(t, expected, actual)
 }
 
 func TestDay3Part2(t *testing.T) {
@@ -42,10 +42,8 @@ func TestDay3Part2(t *testing.T) {
 		".#..#...#.#",
 	}
 
-	result := Day3Part2(input)
 	expected := 336
+	actual := Day3Part2(input)
 
-	if result != expected {
-		t.Fatalf("The provided example case failed, expected %v, got %v", expected, result)
-	}
+	assert.Equal(t, expected, actual)
 }
