@@ -4,11 +4,16 @@ import (
 	"strconv"
 )
 
+// ToInteger converts a string to an integer
+func ToInteger(text string) (int, error) {
+	return strconv.Atoi(text)
+}
+
 // ToIntegers converts a slice of strings to a slice of integers
 func ToIntegers(stringList []string) []int {
 	ints := make([]int, len(stringList))
 	for i, s := range stringList {
-		ints[i], _ = strconv.Atoi(s)
+		ints[i], _ = ToInteger(s)
 	}
 	return ints
 }
