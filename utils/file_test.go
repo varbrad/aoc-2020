@@ -28,10 +28,22 @@ func TestReadInputToListCanParseAList(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestReadInputToListHandlesNonExistantFile(t *testing.T) {
+	_, err := ReadInputToList("__tests__/non-existant-file")
+
+	assert.Error(t, err)
+}
+
 func TestReadInputToIntegerListCanParseAList(t *testing.T) {
 	expected := []int{1, 2, 3}
 	actual, err := ReadInputToIntegerList("__tests__/list")
 
 	assert.Equal(t, expected, actual)
 	assert.Nil(t, err)
+}
+
+func TestReadInputToIntegerListHandlesNonExistantFile(t *testing.T) {
+	_, err := ReadInputToIntegerList("__tests__/non-existant-file")
+
+	assert.Error(t, err)
 }
