@@ -18,7 +18,7 @@ func main() {
 
 	fmt.Printf("Part 1 = %v", Day2Part1(input))
 	fmt.Println("")
-	fmt.Printf("Part 1 = %v", Day2Part2(input))
+	fmt.Printf("Part 2 = %v", Day2Part2(input))
 	fmt.Println("")
 }
 
