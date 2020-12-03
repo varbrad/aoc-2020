@@ -18,3 +18,18 @@ func TestDay2Part1(t *testing.T) {
 		t.Fatalf("The provided example case failed, expected %v, got %v", expected, result)
 	}
 }
+
+func TestDay2Part2(t *testing.T) {
+	input := []string{
+		"1-3 a: abcde",
+		"1-3 b: cdefg",
+		"2-9 c: ccccccccc",
+	}
+
+	result := Day2Part2(input)
+	expected := 1
+
+	if result != expected {
+		t.Fatalf("The provided example case failed, expected %v, got %v", expected, result)
+	}
+}
