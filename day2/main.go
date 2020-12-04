@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"regexp"
 
@@ -16,10 +15,8 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Part 1 = %v", Day2Part1(input))
-	fmt.Println("")
-	fmt.Printf("Part 2 = %v", Day2Part2(input))
-	fmt.Println("")
+	utils.Part1(Day2Part1(input))
+	utils.Part2(Day2Part2(input))
 }
 
 // Day2Part1 solver

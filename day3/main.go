@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/varbrad/aoc-2020/utils"
@@ -15,10 +14,8 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Part 1 = %v", Day3Part1(input))
-	fmt.Println("")
-	fmt.Printf("Part 2 = %v", Day3Part2(input))
-	fmt.Println("")
+	utils.Part1(Day3Part1(input))
+	utils.Part2(Day3Part2(input))
 }
 
 // Day3Part1 solver

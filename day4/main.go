@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"regexp"
 	"strings"
@@ -21,10 +20,8 @@ func main() {
 
 	input := string(contents)
 
-	fmt.Printf("Part 1 = %v", Day4Part1(input))
-	fmt.Println("")
-	fmt.Printf("Part 2 = %v", Day4Part2(input))
-	fmt.Println("")
+	utils.Part1(Day4Part1(input))
+	utils.Part2(Day4Part2(input))
 }
 
 // Day4Part1 solver
