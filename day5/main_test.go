@@ -18,14 +18,28 @@ func TestDay5Part1(t *testing.T) {
 }
 
 func TestDay5Part2(t *testing.T) {
-	expected := 4
-	actual := Day5Part2([]string{
-		"FFFFFFFLLR",
-		"FFFFFFFLRL",
-		"FFFFFFFLRR",
-		"FFFFFFFRLR",
+
+	t.Run("works for valid input", func(t *testing.T) {
+		expected := 4
+		actual := Day5Part2([]string{
+			"FFFFFFFLLR",
+			"FFFFFFFLRL",
+			"FFFFFFFLRR",
+			"FFFFFFFRLR",
+		})
+		assert.Equal(t, expected, actual)
 	})
-	assert.Equal(t, expected, actual)
+
+	t.Run("returns -1 for invalid input", func(t *testing.T) {
+		expected := -1
+		actual := Day5Part2([]string{
+			"FBFBBFFRLR",
+			"BFFFBBFRRR",
+			"FFFBBBFRRR",
+			"BBFFBBFRLL",
+		})
+		assert.Equal(t, expected, actual)
+	})
 }
 
 func TestGetSeatID(t *testing.T) {
