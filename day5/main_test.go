@@ -17,6 +17,17 @@ func TestDay5Part1(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
+func TestDay5Part2(t *testing.T) {
+	expected := 4
+	actual := Day5Part2([]string{
+		"FFFFFFFLLR",
+		"FFFFFFFLRL",
+		"FFFFFFFLRR",
+		"FFFFFFFRLR",
+	})
+	assert.Equal(t, expected, actual)
+}
+
 func TestGetSeatID(t *testing.T) {
 	t.Run("test case 1", func(t *testing.T) {
 		expected := 357

@@ -17,6 +17,7 @@ func main() {
 	}
 
 	utils.Part1(Day5Part1(input))
+	utils.Part2(Day5Part2(input))
 }
 
 // Day5Part1 solver
@@ -31,6 +32,27 @@ func Day5Part1(input []string) int {
 	}
 
 	return max
+}
+
+// Day5Part2 solver
+func Day5Part2(input []string) int {
+	max := Day5Part1(input)
+	m := make(map[int]bool)
+
+	for _, s := range input {
+		m[GetSeatID(s)] = true
+	}
+
+	for i := 0; i < max; i++ {
+		if m[i] {
+			continue
+		}
+		if m[i-1] && m[i+1] {
+			return i
+		}
+	}
+
+	return -1
 }
 
 // GetSeatID returns the seat id of a given input string
