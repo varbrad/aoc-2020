@@ -1,6 +1,6 @@
 # ☃️ Advent of Code 2020 ☃️
 
-[![codecov](https://codecov.io/gh/varbrad/aoc-2020/branch/master/graph/badge.svg?token=FXFN9E88Y5)](https://codecov.io/gh/varbrad/aoc-2020)
+[![codecov](https://codecov.io/gh/varbrad/aoc-2020/branch/main/graph/badge.svg?token=FXFN9E88Y5)](https://codecov.io/gh/varbrad/aoc-2020)
 
 Hey! This year I am doing all the [Advent of Code 2020](https://adventofcode.com/2020) challenges in [Golang](https://golang.org/)!
 
