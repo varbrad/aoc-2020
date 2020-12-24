@@ -20,49 +20,82 @@ func main() {
 var bagRegex = regexp.MustCompile(`^([\w\s]+) bags contain`)
 var containRegex = regexp.MustCompile(`(\d+) ([\w\s]+) bags?`)
 
-type bagMap map[string]int
+type bagType struct {
+	name     string
+	contains []container
+}
+
+type container struct {
+	bag   *bagType
+	count int
+}
+
+type bagMap map[string]*bagType
 
 // Day7Part1 solver
 func Day7Part1(input []string) int {
-	m := map[string]bagMap{}
+	bm := bagMap{}
 
-	for _, s := range input {
-		bagColor := bagRegex.FindStringSubmatch(s)[1]
-		contains := containRegex.FindAllStringSubmatch(s, -1)
-		m[bagColor] = map[string]int{}
-
-		for _, result := range contains {
-			count, _ := utils.ToInteger(result[1])
-			m[bagColor][result[2]] = count
+	for _, str := range input {
+		name := bagRegex.FindStringSubmatch(str)
+		contains := containRegex.FindAllStringSubmatch(str, -1)
+		bm.add(name[1])
+		for _, match := range contains {
+			count, _ := utils.ToInteger(match[1])
+			bagName := match[2]
+			bm.add(bagName)
+			bm.addContainsBag(name[1], count, bagName)
 		}
 	}
 
-	bagStack := []string{"shiny gold"}
-	validBags := map[string]bool{}
-
-	for len(bagStack) > 0 {
-		bag := bagStack[0]
-		bagStack = bagStack[1:]
-
-		// Go thru the map and find any where bag is in the map
-		for key, contained := range m {
-			if key == bag || contains(bagStack, key) {
-				continue
-			}
-			in := contained[bag] > 0
-			if in {
-				bagStack = append(bagStack, key)
-				validBags[key] = true
-			}
-		}
-	}
-
-	return len(validBags)
+	return bm.countHas("shiny gold")
 }
 
-func contains(arr []string, val string) bool {
-	for _, v := range arr {
-		if v == val {
+func (b *bagMap) add(name string) *bagType {
+	bag, exists := (*b)[name]
+
+	if exists {
+		return bag
+	}
+
+	newBag := &bagType{name: name, contains: []container{}}
+	(*b)[name] = newBag
+
+	return newBag
+}
+
+func (b *bagMap) addContainsBag(cont string, count int, bag string) {
+	containerBag := (*b)[cont]
+	innerBag := (*b)[bag]
+
+	contained := container{bag: innerBag, count: count}
+
+	containerBag.contains = append(containerBag.contains, contained)
+}
+
+func (b *bagMap) countHas(name string) int {
+	count := 0
+	for _, v := range *b {
+		if v.name == name {
+			continue
+		}
+		if v.has(name) {
+			count++
+		}
+	}
+	return count
+}
+
+func (b *bagType) has(name string) bool {
+	if b.name == name {
+		return true
+	}
+	if len(b.contains) == 0 {
+		return false
+	}
+	for _, c := range b.contains {
+		contained := c.bag.has(name)
+		if contained {
 			return true
 		}
 	}
