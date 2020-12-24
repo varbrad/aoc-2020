@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"regexp"
+	"strings"
 
 	"github.com/varbrad/aoc-2020/utils"
 )
@@ -15,23 +16,37 @@ func main() {
 	}
 
 	utils.Part1(Day8Part1(input))
+	utils.Part2(Day8Part2(input))
 }
 
 // Day8Part1 solver
 func Day8Part1(input []string) int {
 	program := parseProgram(input)
+	program.run()
+	return program.acc
+}
 
-	visited := map[int]bool{}
-
-	for {
-		if visited[program.index] {
-			break
+// Day8Part2 solver
+func Day8Part2(input []string) int {
+	for i, v := range input {
+		isNop, isJmp := strings.HasPrefix(v, "nop"), strings.HasPrefix(v, "jmp")
+		if !isNop && !isJmp {
+			continue
 		}
-		visited[program.index] = true
-		program.step()
+		inputCopy := append([]string(nil), input...)
+		if isNop {
+			inputCopy[i] = strings.Replace(v, "nop", "jmp", 1)
+		} else {
+			inputCopy[i] = strings.Replace(v, "jmp", "nop", 1)
+		}
+		program := parseProgram(inputCopy)
+		ok := program.run()
+		if ok {
+			return program.acc
+		}
 	}
 
-	return program.acc
+	return -1
 }
 
 var instructionRegex = regexp.MustCompile(`^(\w+) \+?([\d-]+)$`)
@@ -74,4 +89,21 @@ func (p *program) step() {
 	default:
 		p.index++
 	}
+}
+
+func (p *program) run() bool {
+	visited := map[int]bool{}
+	totalIns := len(p.instructions)
+
+	for {
+		if visited[p.index] {
+			return false
+		}
+		if totalIns == p.index {
+			break
+		}
+		visited[p.index] = true
+		p.step()
+	}
+	return true
 }
