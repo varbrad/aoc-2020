@@ -15,6 +15,7 @@ func main() {
 	}
 
 	utils.Part1(Day7Part1(input))
+	utils.Part2(Day7Part2(input))
 }
 
 var bagRegex = regexp.MustCompile(`^([\w\s]+) bags contain`)
@@ -49,6 +50,25 @@ func Day7Part1(input []string) int {
 	}
 
 	return bm.countHas("shiny gold")
+}
+
+// Day7Part2 solver
+func Day7Part2(input []string) int {
+	bm := bagMap{}
+
+	for _, str := range input {
+		name := bagRegex.FindStringSubmatch(str)
+		contains := containRegex.FindAllStringSubmatch(str, -1)
+		bm.add(name[1])
+		for _, match := range contains {
+			count, _ := utils.ToInteger(match[1])
+			bagName := match[2]
+			bm.add(bagName)
+			bm.addContainsBag(name[1], count, bagName)
+		}
+	}
+
+	return bm.countWithin("shiny gold")
 }
 
 func (b *bagMap) add(name string) *bagType {
@@ -86,6 +106,10 @@ func (b *bagMap) countHas(name string) int {
 	return count
 }
 
+func (b *bagMap) countWithin(name string) int {
+	return (*b)[name].countWithin()
+}
+
 func (b *bagType) has(name string) bool {
 	if b.name == name {
 		return true
@@ -100,4 +124,15 @@ func (b *bagType) has(name string) bool {
 		}
 	}
 	return false
+}
+
+func (b *bagType) countWithin() int {
+	if len(b.contains) == 0 {
+		return 0
+	}
+	sum := 0
+	for _, c := range b.contains {
+		sum += c.count + (c.count * c.bag.countWithin())
+	}
+	return sum
 }
