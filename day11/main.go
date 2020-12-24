@@ -14,6 +14,7 @@ func main() {
 	}
 
 	utils.Part1(Day11Part1(input))
+	utils.Part2(Day11Part2(input))
 }
 
 // Day11Part1 solver
@@ -31,12 +32,28 @@ func Day11Part1(rawLayout []string) int {
 	return layout.getOccupiedSeats()
 }
 
+// Day11Part2 solver
+func Day11Part2(rawLayout []string) int {
+	layout := parseLayout(rawLayout)
+
+	for {
+		changed, nextState := layout.generateV2()
+		layout = nextState
+		if !changed {
+			break
+		}
+	}
+
+	return layout.getOccupiedSeats()
+}
+
 type seatState int
 
 const (
 	floor seatState = iota
 	empty
 	occupied
+	oob
 )
 
 type seatLayout struct {
@@ -75,7 +92,7 @@ func toSeatState(char string) seatState {
 	case "#":
 		return occupied
 	}
-	return occupied
+	return oob
 }
 
 func (sl *seatLayout) generate() (changed bool, layout *seatLayout) {
@@ -86,6 +103,24 @@ func (sl *seatLayout) generate() (changed bool, layout *seatLayout) {
 		for x := range row {
 			current := sl.getSeatState(x, y)
 			next := sl.getNextSeatState(x, y)
+			layout.setSeat(x, y, next)
+			if current != next {
+				changed = true
+			}
+		}
+	}
+
+	return
+}
+
+func (sl *seatLayout) generateV2() (changed bool, layout *seatLayout) {
+	changed = false
+	layout = emptyLayout(sl.w, sl.h)
+
+	for y, row := range layout.grid {
+		for x := range row {
+			current := sl.getSeatState(x, y)
+			next := sl.getNextSeatStateV2(x, y)
 			layout.setSeat(x, y, next)
 			if current != next {
 				changed = true
@@ -118,9 +153,40 @@ func (sl *seatLayout) getNextSeatState(x int, y int) seatState {
 	return currentState
 }
 
+func (sl *seatLayout) getNextSeatStateV2(x int, y int) seatState {
+	currentState := sl.getSeatState(x, y)
+	neighbours := 0
+	for dy := -1; dy <= 1; dy++ {
+		for dx := -1; dx <= 1; dx++ {
+			if dx == 0 && dy == 0 {
+				continue
+			}
+			ddx, ddy := dx, dy
+			state := sl.getSeatState(x+ddx, y+ddy)
+			for {
+				if state != floor {
+					break
+				}
+				ddx += dx
+				ddy += dy
+				state = sl.getSeatState(x+ddx, y+ddy)
+			}
+			if state == occupied {
+				neighbours++
+			}
+		}
+	}
+	if currentState == empty && neighbours == 0 {
+		return occupied
+	} else if currentState == occupied && neighbours >= 5 {
+		return empty
+	}
+	return currentState
+}
+
 func (sl *seatLayout) getSeatState(x int, y int) seatState {
 	if x < 0 || x > sl.w-1 || y < 0 || y > sl.h-1 {
-		return empty
+		return oob
 	}
 	return sl.grid[y][x]
 }
