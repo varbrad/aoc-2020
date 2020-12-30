@@ -55,3 +55,20 @@ func TestDay12Part1(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 }
+
+func TestDay12Part2(t *testing.T) {
+	t.Run(`given test case`, func(t *testing.T) {
+		input := []string{
+			"F10",
+			"N3",
+			"F7",
+			"R90",
+			"F11",
+		}
+
+		expected := 286
+		actual := Day12Part2(input)
+
+		assert.Equal(t, expected, actual)
+	})
+}
