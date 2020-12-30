@@ -55,6 +55,7 @@ func TestDay12Part1(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 }
+<<<<<<< HEAD
 
 func TestDay12Part2(t *testing.T) {
 	t.Run(`given test case`, func(t *testing.T) {
@@ -72,3 +73,5 @@ func TestDay12Part2(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 }
+=======
+>>>>>>> origin/main
