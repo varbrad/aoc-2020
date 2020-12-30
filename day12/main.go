@@ -16,10 +16,7 @@ func main() {
 	}
 
 	utils.Part1(Day12Part1(input))
-<<<<<<< HEAD
 	utils.Part2(Day12Part2(input))
-=======
->>>>>>> origin/main
 }
 
 const (
