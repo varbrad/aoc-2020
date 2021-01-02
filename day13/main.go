@@ -29,6 +29,10 @@ func Day13Part1(input []string) int {
 	return parseInput(input).solve1()
 }
 
+func Day13Part2(input []string) int {
+	return parseInput(input).solve2()
+}
+
 func parseInput(input []string) *PuzzleInput {
 	pi := &PuzzleInput{}
 	target, _ := utils.ToInteger(input[0])
@@ -54,4 +58,8 @@ func (pi *PuzzleInput) solve1() int {
 		}
 	}
 	return int(minVal-target) * minBus
+}
+
+func (pi *PuzzleInput) solve2() int {
+	return 0
 }
