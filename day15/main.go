@@ -8,6 +8,7 @@ func main() {
 	values := []int{2, 0, 1, 7, 4, 14, 18}
 
 	utils.Part1(Day15Part1(values, 2020))
+	utils.Part2(Day15Part1(values, 30000000))
 }
 
 // History of the spoken numbers

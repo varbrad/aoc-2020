@@ -22,3 +22,10 @@ func TestDay15Part1(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 }
+
+func TestDay15Part2(t *testing.T) {
+	expected := 175594
+	actual := Day15Part1([]int{0, 3, 6}, 30000000)
+
+	assert.Equal(t, expected, actual)
+}
