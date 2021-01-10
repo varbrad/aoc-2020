@@ -49,3 +49,26 @@ func TestDay15Part1(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 }
+
+func TestDay15Part2(t *testing.T) {
+	t.Run(`solves the part 2 example`, func(t *testing.T) {
+		input := `
+			class: 0-1 or 4-19
+			seat row: 0-5 or 8-19
+			seat col: 0-13 or 16-19
+
+			your ticket:
+			11,12,13
+
+			nearby tickets:
+			3,9,18
+			15,1,5
+			5,14,9
+		`
+
+		expected := 143
+		actual := Day16Part2(input, "seat")
+
+		assert.Equal(t, expected, actual)
+	})
+}

@@ -16,12 +16,35 @@ func main() {
 	}
 
 	utils.Part1(Day16Part1(string(input)))
+	utils.Part2(Day16Part2(string(input), "departure"))
 }
 
 // Day16Part1 solver
 func Day16Part1(rawInput string) int {
 	input := parseInput(rawInput)
 	return input.getTotalErrorRate()
+}
+
+// Day16Part2 solver
+func Day16Part2(rawInput string, startsWith string) int {
+	input := parseInput(rawInput)
+	input.removeInvalidNearbyTickets()
+
+	fieldOrder := input.calculateFieldOrder()
+
+	ticketData := map[string]int{}
+	for ix, value := range input.yourTicket {
+		fieldName := fieldOrder[ix]
+		ticketData[fieldName] = value
+	}
+
+	prod := 1
+	for key, value := range ticketData {
+		if strings.HasPrefix(key, startsWith) {
+			prod *= value
+		}
+	}
+	return prod
 }
 
 // Range type
@@ -43,7 +66,7 @@ type Input struct {
 	nearbyTickets []Ticket
 }
 
-var fieldsRegex = regexp.MustCompile(`(\w+): (\d+)-(\d+) or (\d+)-(\d+)`)
+var fieldsRegex = regexp.MustCompile(`(\w{1}[\w\s]+): (\d+)-(\d+) or (\d+)-(\d+)`)
 var yourTicketRegex = regexp.MustCompile(`your ticket:\s*([\d,]+)\s`)
 var nearbyTicketsRegex = regexp.MustCompile(`nearby tickets:\s+((?:[\d,]+\s*)*)`)
 
@@ -82,6 +105,37 @@ func parseTickets(input string) []Ticket {
 	return ts
 }
 
+func (i *Input) calculateFieldOrder() []string {
+	possibles := getPossibleFields(i.yourTicket, i.fields)
+
+	for _, ticket := range i.nearbyTickets {
+		thisPossibles := getPossibleFields(ticket, i.fields)
+		possibles = combinePossibleFields(possibles, thisPossibles)
+	}
+
+	index := -1
+	for flatLength(possibles) > len(possibles) {
+		possibles, index = flattenPossibles(possibles, index)
+	}
+
+	final := []string{}
+	for _, v := range possibles {
+		final = append(final, v[0])
+	}
+
+	return final
+}
+
+func (i *Input) removeInvalidNearbyTickets() {
+	newNearbyTickets := []Ticket{}
+	for _, v := range i.nearbyTickets {
+		if isValidTicket(v, i.fields) {
+			newNearbyTickets = append(newNearbyTickets, v)
+		}
+	}
+	i.nearbyTickets = newNearbyTickets
+}
+
 func (i *Input) getTotalErrorRate() int {
 	sum := 0
 	for _, t := range i.nearbyTickets {
@@ -91,6 +145,96 @@ func (i *Input) getTotalErrorRate() int {
 }
 
 // Helper methods
+func flattenPossibles(possibles [][]string, ix int) ([][]string, int) {
+	lenOneIx := findLengthOne(possibles, ix)
+	if lenOneIx == -1 {
+		return possibles, -1
+	}
+	val := possibles[lenOneIx][0]
+
+	newPossibles := [][]string{}
+
+	for ix := range possibles {
+		newPossibles = append(newPossibles, []string{})
+		if ix == lenOneIx {
+			newPossibles[ix] = append(newPossibles[ix], val)
+			continue
+		} else {
+			newPossibles[ix] = removeFromArr(possibles[ix], val)
+		}
+	}
+
+	return newPossibles, lenOneIx
+}
+
+func findLengthOne(arr [][]string, ix int) int {
+	for i, v := range arr {
+		if i <= ix {
+			continue
+		}
+		if len(v) == 1 {
+			return i
+		}
+	}
+	return -1
+}
+
+func flatLength(arr [][]string) int {
+	length := 0
+	for _, v := range arr {
+		length += len(v)
+	}
+	return length
+}
+
+func combinePossibleFields(a [][]string, b [][]string) [][]string {
+	final := [][]string{}
+
+	for ix, groups := range a {
+		final = append(final, []string{})
+		for _, key := range groups {
+			if isInArray(b[ix], key) {
+				final[ix] = append(final[ix], key)
+			}
+		}
+	}
+
+	return final
+}
+
+func removeFromArr(arr []string, value string) []string {
+	vs := []string{}
+	for _, v := range arr {
+		if v == value {
+			continue
+		}
+		vs = append(vs, v)
+	}
+	return vs
+}
+
+func isInArray(arr []string, value string) bool {
+	for _, v := range arr {
+		if v == value {
+			return true
+		}
+	}
+	return false
+}
+
+func getPossibleFields(t Ticket, fm FieldMap) [][]string {
+	possibles := [][]string{}
+	for ix, v := range t {
+		possibles = append(possibles, []string{})
+		for key, field := range fm {
+			if isInField(field, v) {
+				possibles[ix] = append(possibles[ix], key)
+			}
+		}
+	}
+	return possibles
+}
+
 func getErrorRate(t Ticket, fm FieldMap) int {
 	sum := 0
 	for _, v := range t {
@@ -99,6 +243,10 @@ func getErrorRate(t Ticket, fm FieldMap) int {
 		}
 	}
 	return sum
+}
+
+func isValidTicket(t Ticket, fm FieldMap) bool {
+	return getErrorRate(t, fm) == 0
 }
 
 func isInFieldMap(fm FieldMap, v int) bool {
